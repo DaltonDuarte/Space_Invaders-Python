@@ -203,6 +203,7 @@ if __name__ == "__main__":
                     timerAlien4 = 0
                     textLifes = fontText.render(str(vidas), True, (255, 255, 255), (0, 0, 0))
 
+                # Tiro da nave
                 if event.key == pygame.K_SPACE and pause:
                     if tiro and ship.alive():
                         shot_sound.set_volume(0.1)
@@ -212,6 +213,7 @@ if __name__ == "__main__":
                     if shotShip.alive():
                         tiro = False
 
+                #Pause do jogo
                 if event.key == pygame.K_p:
                     if pause:
                         mexer = False
@@ -224,6 +226,7 @@ if __name__ == "__main__":
                         ship.speed = 5
                         timerAl4 = 1
 
+                #Esquema para testar partes do jogo
                 # if event.key == pygame.K_t:
                 #     for i in ListAliens:
                 #         ListAliens.remove(i)
@@ -232,7 +235,7 @@ if __name__ == "__main__":
                 #         ListWalls.remove(x)
                 #         x.kill()
 
-                #Tiro da nave
+
 
         #Impede do tiro sair caso a nave esteja morta
         if not shotShip.alive():
@@ -296,7 +299,7 @@ if __name__ == "__main__":
 
         #Se a quantidade de vidas for igual a zero, a nave, os aliens e os muros são destruidos,
         #e caso a pontuação dessa rodada seja maior que a de antes ela vai para o "HighScore",
-        # e tbm aciona o fim
+        #e tbm aciona o fim
         if vidas == 0:
             vidas = 3
             ship.kill()
