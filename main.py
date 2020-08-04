@@ -45,11 +45,14 @@ ListWalls = []
 gameloop = True
 rodadaB = True
 inicio = True
+pause = True
+mexer = True
 fim = False
 tiro = True
 randomAlien = 0
 timerAlien4 = 0
 maxPontos = 0
+timerAl4 = 0
 vidaWall = 0
 pontos1 = 0
 pontos2 = 0
@@ -200,16 +203,7 @@ if __name__ == "__main__":
                     timerAlien4 = 0
                     textLifes = fontText.render(str(vidas), True, (255, 255, 255), (0, 0, 0))
 
-                if event.key == pygame.K_t:
-                    for i in ListAliens:
-                        ListAliens.remove(i)
-                        i.kill()
-                    for x in ListWalls:
-                        ListWalls.remove(x)
-                        x.kill()
-
-                #Tiro da nave
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and pause:
                     if tiro and ship.alive():
                         shot_sound.set_volume(0.1)
                         shot_sound.play()
@@ -217,6 +211,28 @@ if __name__ == "__main__":
                         shotShip.rect.center = ship.rect.center
                     if shotShip.alive():
                         tiro = False
+
+                if event.key == pygame.K_p:
+                    if pause:
+                        mexer = False
+                        pause = False
+                        ship.speed = 0
+                        timerAl4 = 0
+                    else:
+                        mexer = True
+                        pause = True
+                        ship.speed = 5
+                        timerAl4 = 1
+
+                # if event.key == pygame.K_t:
+                #     for i in ListAliens:
+                #         ListAliens.remove(i)
+                #         i.kill()
+                #     for x in ListWalls:
+                #         ListWalls.remove(x)
+                #         x.kill()
+
+                #Tiro da nave
 
         #Impede do tiro sair caso a nave esteja morta
         if not shotShip.alive():
@@ -227,32 +243,33 @@ if __name__ == "__main__":
         #Desenhando as classes que tiverem no "objectGroup"
         objectGroup.draw(diplay)
 
-        #Aumentar a velocidade dos aliens depois de alguns destruidos
-        count += 1
-        if len(ListAliens) == 55:
-            speed = rodada
-        elif len(ListAliens) < 30:
-            speed = rodada + 1
-        elif len(ListAliens) < 10:
-            speed = rodada + 2
-        #Move os aliens a cada 3 quadros a nave se move na velocidade do "speed"
-        if count % 3 == 0:
-            for i in ListAliens:
-                 if i.turn:
-                     i.timer = 5
-                 else:
-                     i.timer = -5
-        else:
-            for i in ListAliens:
-                 if i.turn:
-                     i.timer = 0
-                 else:
-                     i.timer = 0
-        if count == 61:
-            count = 0
+        if mexer:
+            #Aumentar a velocidade dos aliens depois de alguns destruidos
+            if len(ListAliens) == 55:
+                speed = rodada
+            elif len(ListAliens) < 30:
+                speed = rodada + 1
+            elif len(ListAliens) < 10:
+                speed = rodada + 2
+            #Move os aliens a cada 3 quadros a nave se move na velocidade do "speed"
+            count += 1
+            if count % 3 == 0:
+                for i in ListAliens:
+                     if i.turn:
+                         i.timer = speed
+                     else:
+                         i.timer = -speed
+            else:
+                for i in ListAliens:
+                     if i.turn:
+                         i.timer = 0
+                     else:
+                         i.timer = 0
+            if count == 61:
+                count = 0
 
         #Faz um alien aleatorio atirar
-        if not len(ListAliens) == 0 and not fim and ship.alive():
+        if not len(ListAliens) == 0 and not fim and ship.alive() and pause:
             timer += 1
             for i in ListAliens:
                 if i.alive():
@@ -272,8 +289,8 @@ if __name__ == "__main__":
             textLifes = fontText.render(str(vidas), True, (255, 255, 255), (0, 0, 0))
 
         #Inicializa o quarto tipo de alien depois de um tempo
-        timerAlien4 += 1
-        if timerAlien4 > 800 and not fim and not len(ListAliens) < 5:
+        timerAlien4 += timerAl4
+        if timerAlien4 > 800 and not fim and not len(ListAliens) < 5 and pause:
             timerAlien4 = 0
             alien4_56 = Alien4(objectGroup, alienGroup)
 
