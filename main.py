@@ -46,6 +46,7 @@ gameloop = True
 rodadaB = True
 inicio = True
 pause = True
+mute = True
 mexer = True
 fim = False
 tiro = True
@@ -64,8 +65,11 @@ timer = 0
 
 #Inicializando sons do jogo
 shot_sound = pygame.mixer.Sound("data/shot.wav")
+shot_sound.set_volume(0.1)
 explosion_ship_sound = pygame.mixer.Sound("data/explosion_ship.ogg")
+explosion_ship_sound.set_volume(0.05)
 explosion_alien_sound = pygame.mixer.Sound("data/explosion_alien.wav")
+explosion_alien_sound.set_volume(0.05)
 
 #Pega a fonte da pasta e define o tamanho dela
 ship_image = pygame.image.load("data/ship.png").convert()
@@ -206,7 +210,6 @@ if __name__ == "__main__":
                 # Tiro da nave
                 if event.key == pygame.K_SPACE and pause:
                     if tiro and ship.alive():
-                        shot_sound.set_volume(0.1)
                         shot_sound.play()
                         shotShip = ShotShip(objectGroup, shotShipGroup)
                         shotShip.rect.center = ship.rect.center
@@ -226,14 +229,18 @@ if __name__ == "__main__":
                         ship.speed = 5
                         timerAl4 = 1
 
-                #Esquema para testar partes do jogo
-                # if event.key == pygame.K_t:
-                #     for i in ListAliens:
-                #         ListAliens.remove(i)
-                #         i.kill()
-                #     for x in ListWalls:
-                #         ListWalls.remove(x)
-                #         x.kill()
+                #Mutar o jogo
+                if event.key == pygame.K_m:
+                    if mute:
+                        mute = False
+                        shot_sound.set_volume(0)
+                        explosion_ship_sound.set_volume(0)
+                        explosion_alien_sound.set_volume(0)
+                    else:
+                        mute = True
+                        shot_sound.set_volume(0.1)
+                        explosion_ship_sound.set_volume(0.05)
+                        explosion_alien_sound.set_volume(0.05)
 
 
 
@@ -286,7 +293,6 @@ if __name__ == "__main__":
         #Caso o tiro do alien acerte a nave ela perde uma vida
         shipShotAlien = pygame.sprite.spritecollide(ship, shotAlienGroup, True, pygame.sprite.collide_mask)
         if shipShotAlien:
-            explosion_ship_sound.set_volume(0.05)
             explosion_ship_sound.play()
             vidas -= 1
             textLifes = fontText.render(str(vidas), True, (255, 255, 255), (0, 0, 0))
@@ -368,7 +374,6 @@ if __name__ == "__main__":
         #Esquema para ver se o tiro da nave acerta os aliens, caso acerte, o alien é destruido e recebe ponto pela morte
         ShipShot = pygame.sprite.groupcollide(shotShipGroup, alienGroup, True, True, pygame.sprite.collide_mask)
         if ShipShot:
-            explosion_alien_sound.set_volume(0.05)
             explosion_alien_sound.play()
             for i in ListAliens:
                 if not i.alive():
