@@ -1,7 +1,7 @@
 # Space_Invaders-Python
 Space_Invaders in Python
 
-Não ta funcionando / Not Working
+Não esta funcionando / Not working
 
 
 
